@@ -4,16 +4,18 @@ Stock Prices Prediction Project with Neptune.ai (New version)
 https://neptune.ai/blog/neptune-new
 '''
 ###### Create Neptune project (new version)
-## update: pip install neptune-client==0.9.8
+## update: pip install neptune-client
 import neptune.new as neptune
 import os
+
+api_token_ = "eyJhcGlfYWRkcmVzcyI6Imh0dHBzOi8vYXBwLm5lcHR1bmUuYWkiLCJhcGlfdXJsIjoiaHR0cHM6Ly9hcHAubmVwdHVuZS5haSIsImFwaV9rZXkiOiIxN2Q5OGNhYy1hYjk0LTQ0MzgtODI2Yi0wMTgzMjU3YmI3MTUifQ=="
 
 # Connect your script to Neptune new version 
 myProject = 'dayrontabares/stockp'
 project = neptune.init(
     project="dayrontabares/stockp",
-    api_token="eyJhcGlfYWRkcmVzcyI6Imh0dHBzOi8vYXBwLm5lcHR1bmUuYWkiLCJhcGlfdXJsIjoiaHR0cHM6Ly9hcHAubmVwdHVuZS5haSIsImFwaV9rZXkiOiIxN2Q5OGNhYy1hYjk0LTQ0MzgtODI2Yi0wMTgzMjU3YmI3MTUifQ==",
-) 
+    api_token= api_token_
+)
 project.stop()
 
 
@@ -39,11 +41,13 @@ import matplotlib.pyplot as plt
 import pandas as pd
 import datetime as dt
 import urllib.request, json
-os.chdir("C:\\Users\\dayro\\Desktop\\School Files\\Personal Projects\\Python\\AlgTrading\\")  
+os.chdir("C:\\Users\\Dayron Tabares\\Desktop\\Drive\\Personal Projects\\Python\\AlgTrading\\Stock-Price-Predictor")  
 
 data_source = 'alphavantage' # alphavantage 
 
 api_key = str('5WRMO21UFTH6ICXA')
+
+print(os.getenv(api_key))
 
 if data_source == 'alphavantage':
     # ====================== Loading Data from Alpha Vantage ==================================
@@ -170,7 +174,7 @@ window_var = str(window_size) + 'day'
 if CURRENT_MODEL == 'SMA':  
     # Create an experiment and log the model in Neptuen new verison
     npt_exp = neptune.init(    
-        api_token=os.getenv(api_key),
+        api_token=api_token_,
         project=myProject, 
         name='SMA', 
         description='stock-prediction-machine-learning', 
@@ -189,7 +193,7 @@ if CURRENT_MODEL == 'SMA':
     
 elif CURRENT_MODEL == 'EMA':  
     # Create an experiment and log the model in Neptuen new verison
-    npt_exp = neptune.init(api_token=os.getenv(api_key),
+    npt_exp = neptune.init(api_token=api_token_,
         project=myProject, 
         name='EMA', 
         description='stock-prediction-machine-learning', 
@@ -219,9 +223,9 @@ elif CURRENT_MODEL == 'LSTM':
                      'epochs': cur_epochs
                      }
     
-    # Create an experiment and log the model in Neptuen new verison
+    # Create an experiment and log the model in Neptune new verison
     npt_exp = neptune.init(    
-        api_token=os.getenv(api_key),
+        api_token=api_token_,
         project=myProject, 
         name='LSTM',         
         description='stock-prediction-machine-learning', 
@@ -298,10 +302,10 @@ elif CURRENT_MODEL == 'LSTM':
     ### Plot prediction and true trends and log to Neptune         
     def plot_stock_trend_lstm(train, test, logNeptune=True):        
         fig = plt.figure(figsize=(20,10))
-        plt.plot(train.tail(50)['Date'], train.tail(50)['Close'], label = 'Train Closing Price')
-        plt.plot(test.tail(50)['Date'], test.tail(50)['Close'], label = 'Test Closing Price')
-        plt.plot(test.tail(50)['Date'], test.tail(50)['Predictions_lstm'], label = 'Predicted Closing Price')
-        plt.title('LSTM Model')
+        plt.plot(train.tail(20)['Date'], train.tail(20)['Close'], label = 'Train Closing Price')
+        plt.plot(test.tail(20)['Date'], test.tail(20)['Close'], label = 'Test Closing Price')
+        plt.plot(test.tail(20)['Date'], test.tail(20)['Predictions_lstm'], label = 'Predicted Closing Price')
+        plt.title('LSTM Model prediction')
         plt.xticks(rotation = 'vertical')
         plt.xlabel('Date')
         plt.ylabel('Stock Price ($)')
